@@ -6,61 +6,151 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+# Sistem Form Generator Pertanahan Gorontalo
 
-## About Laravel
+Aplikasi web pembuatan dan pengelolaan form administrasi untuk instansi pertanahan di Gorontalo berbasis Laravel 11.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tentang Aplikasi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Aplikasi ini dirancang untuk memudahkan proses administrasi kantor di instansi pertanahan Gorontalo, dengan fokus utama:
+- Pembuatan dan generate form administrasi otomatis
+- Konversi data ke format Excel 
+- Repositori dokumen digital (hasil scan)
+- Pengelolaan administrasi perjalanan dinas
+- Pengarsipan dokumen digital
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Teknologi yang Digunakan
 
-## Learning Laravel
+- **Framework:** Laravel 11
+- **Database:** MySQL
+- **Frontend:** Blade, Vite
+- **Export Data:** Laravel Excel
+- **Authentication:** Laravel Fortify/Breeze
+- **File Storage:** Laravel Storage
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Fitur Utama
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- 📝 **Form Generator**
+  - Pembuatan form otomatis untuk berbagai kebutuhan administrasi
+  - Template yang dapat disesuaikan
+  - Form untuk perjalanan dinas, pengeluaran, dan administrasi lainnya
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- 📊 **Export Data**
+  - Konversi data form ke format Excel
+  - Laporan yang dapat diunduh
+  - Filter data sebelum export
 
-## Laravel Sponsors
+- 🗄️ **Repositori Dokumen**
+  - Penyimpanan dokumen hasil scan
+  - Organisasi file berdasarkan kategori
+  - Pencarian dokumen cepat
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- 📱 **Dashboard Admin**
+  - Monitoring penggunaan form
+  - Statistik penggunaan aplikasi
+  - Manajemen pengguna
 
-### Premium Partners
+- 🚗 **Modul Perjalanan Dinas**
+  - Input data perjalanan dinas
+  - Generate surat tugas
+  - Rekap biaya perjalanan
+  - Arsip berkas perjalanan dinas
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Instalasi
 
-## Contributing
+### Prasyarat
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL Database
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Langkah Instalasi
 
-## Code of Conduct
+1. Clone repository ini
+   ```bash
+   git clone https://github.com/andimohsoreang/Pertanahan.git
+   cd Pertanahan
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Install dependensi PHP
+   ```bash
+   composer install
+   ```
 
-## Security Vulnerabilities
+3. Install dependensi JavaScript
+   ```bash
+   npm install && npm run dev
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. Siapkan file environment
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## License
+5. Konfigurasi database di file .env
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=pertanahan
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. Jalankan migrasi dan seeder
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. Siapkan storage link untuk penyimpanan file
+   ```bash
+   php artisan storage:link
+   ```
+
+8. Jalankan aplikasi
+   ```bash
+   php artisan serve
+   ```
+
+## Penggunaan
+
+1. Akses aplikasi di `http://localhost:8000`
+2. Login dengan kredensial admin:
+   - Email: admin@example.com
+   - Password: password
+3. Pilih modul yang ingin digunakan dari sidebar
+4. Untuk membuat form baru, pilih jenis form dan isi data yang diperlukan
+5. Untuk mengekspor data ke Excel, gunakan tombol "Export" di halaman terkait
+6. Untuk mengunggah dokumen, gunakan modul Repositori Dokumen
+
+## Struktur Database
+
+Aplikasi ini menggunakan struktur database relasional dengan tabel-tabel utama:
+- `users` - Data pengguna sistem
+- `form_templates` - Template form yang tersedia
+- `form_data` - Data yang diinput melalui form
+- `business_trips` - Data perjalanan dinas
+- `documents` - Dokumen yang diunggah ke sistem
+- `trip_expenses` - Rincian biaya perjalanan dinas
+
+## Kontribusi
+
+Jika Anda ingin berkontribusi pada project ini, silakan ikuti langkah-langkah berikut:
+1. Fork repository
+2. Buat branch fitur baru (`git checkout -b feature/fitur-baru`)
+3. Commit perubahan Anda (`git commit -m 'Menambahkan fitur baru'`)
+4. Push ke branch (`git push origin feature/fitur-baru`)
+5. Buat Pull Request
+
+## Lisensi
+
+Project ini dilisensikan di bawah [MIT License](LICENSE)
+
+## Kontak
+
+Andi Mohsoreang - [GitHub](https://github.com/andimohsoreang)
+
+---
+
+Dibuat dengan ❤️ untuk Instansi Pertanahan Gorontalo
