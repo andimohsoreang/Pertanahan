@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Employee;
+use App\Models\Seksi;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,75 +18,47 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Hapus data existing
-        DB::table('users')->delete();
+        // Cek apakah sudah ada seksi
+        $seksi = Seksi::first();
 
-        // Data user dengan role berbeda
-        $users = [
-            [
-                'id' => Str::ulid(),
-                'name' => 'Super Admin',
-                'email' => 'superadmin@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('SuperAdmin123!'),
-                'role' => 'superadmin',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => Str::ulid(),
-                'name' => 'Head of Department',
-                'email' => 'hod@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('HeadOfDept123!'),
-                'role' => 'hod',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => Str::ulid(),
-                'name' => 'Verificator',
-                'email' => 'verificator@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('Verificator123!'),
-                'role' => 'verificator',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => Str::ulid(),
-                'name' => 'Operator',
-                'email' => 'operator@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('Operator123!'),
-                'role' => 'operator',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => Str::ulid(),
-                'name' => 'User Tidak Aktif',
-                'email' => 'nonactive@example.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('NonActive123!'),
-                'role' => 'operator',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
-        ];
+        if (!$seksi) {
+            $this->command->error('Tidak ada data seksi. Mohon buat data seksi terlebih dahulu.');
+            return;
+        }
 
-        // Masukkan data
-        User::insert($users);
+        // Cek apakah sudah ada pegawai
+        $employee = Employee::where('seksi_id', $seksi->id)->first();
 
-        // Output informasi
-        $this->command->info('User seeder berhasil dijalankan!');
-        $this->command->info('Email dan Password:');
-        $this->command->table(['Role', 'Email', 'Password'], [
-            ['Super Admin', 'superadmin@example.com', 'SuperAdmin123!'],
-            ['Head of Department', 'hod@example.com', 'HeadOfDept123!'],
-            ['Verificator', 'verificator@example.com', 'Verificator123!'],
-            ['Operator', 'operator@example.com', 'Operator123!'],
-            ['Non Active', 'nonactive@example.com', 'NonActive123!']
+        if (!$employee) {
+            $this->command->error('Tidak ada data pegawai. Mohon buat data pegawai terlebih dahulu.');
+            return;
+        }
+
+        // Cek apakah sudah ada user superadmin
+        $existingSuperAdmin = User::where('role', 'superadmin')->first();
+
+        if ($existingSuperAdmin) {
+            $this->command->info('User SuperAdmin sudah ada!');
+            $this->command->table(
+                ['Username', 'Email', 'Role'],
+                [[$existingSuperAdmin->username, $existingSuperAdmin->email, $existingSuperAdmin->role]]
+            );
+            return;
+        }
+
+        // Buat User SuperAdmin berdasarkan employee yang sudah ada
+        $superAdmin = User::create([
+            'employee_id' => $employee->id,
+            'username' => 'superadmin',
+            'email' => $employee->nama_pelaksana . '@pertanahan.go.id',
+            'password' => Hash::make('password'),
+            'role' => 'superadmin'
         ]);
+
+        $this->command->info('Berhasil membuat akun Super Admin!');
+        $this->command->table(
+            ['Username', 'Email', 'Nama Pegawai', 'Seksi'],
+            [[$superAdmin->username, $superAdmin->email, $employee->nama_pelaksana, $seksi->nama_seksi]]
+        );
     }
 }
